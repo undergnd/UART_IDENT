@@ -19,7 +19,7 @@
 
 	  while((loop == 0) && (counter_val_get < (12 * min_period_value)))
 	  {
-			counter_val_get = LL_TIM_GetCounter(TIM1);
+		counter_val_get = LL_TIM_GetCounter(TIM1);
 	  }
 	  rekrut_stop_measurement();
 	  rekrut_init();
