@@ -24,5 +24,5 @@
 	  rekrut_stop_measurement();
 	  rekrut_init();
 	}
-}
+
 
