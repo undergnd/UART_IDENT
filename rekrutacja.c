@@ -348,9 +348,7 @@ void rekrut_stop_measurement(void)
 		printf("\n");
 		printf("Rx byte not valid \n");
 	}
-#endif
 
-#if DEBUG_ON == 1
 	LL_mDelay(1000);
 	for(uint8_t k = 0; k < 12; k++)
 	{
