@@ -109,6 +109,7 @@ void rekrut_IRQ_RX_rising_edge(void)
 	EXTI_InitStruct.Type = LL_EXTI_TYPE_EDGE;
 	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING_EDGE;
 	LL_EXTI_Init(&EXTI_InitStruct);
+	
 	int_edge = IRQ_EDGE_IS_SET_RISING;
 }
 
@@ -126,6 +127,7 @@ void rekrut_IRQ_RX_falling_edge(void)
 	EXTI_InitStruct.Type = LL_EXTI_TYPE_EDGE;
 	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING_EDGE;
 	LL_EXTI_Init(&EXTI_InitStruct);
+	
 	int_edge = IRQ_EDGE_IS_SET_FALLING;
 }
 
