@@ -23,10 +23,10 @@
 #define TIMx                       TIM1
 #define LL_EnableClock_TIMx()      LL_APB0_EnableClock(LL_APB0_PERIPH_TIM1);
 
-#define MODULE1						(0xA3)
-#define MODULE2						(0xA5)
-#define MODULE3						(0xA8)
-#define ANSWER_SUPPORTED			(0xAA)
+#define MODULE1				(0xA3)
+#define MODULE2				(0xA5)
+#define MODULE3				(0xA8)
+#define ANSWER_SUPPORTED		(0xAA)
 #define ANSWER_NOT_SUPPORTED		(0xAf)
 
 #define IRQ_EDGE_IS_SET_RISING	1
