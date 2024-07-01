@@ -23,6 +23,12 @@
 #define TIMx                       TIM1
 #define LL_EnableClock_TIMx()      LL_APB0_EnableClock(LL_APB0_PERIPH_TIM1);
 
+#define MODULE1						(0xA3)
+#define MODULE2						(0xA5)
+#define MODULE3						(0xA8)
+#define ANSWER_SUPPORTED			(0xAA)
+#define ANSWER_NOT_SUPPORTED		(0xAf)
+
 #define IRQ_EDGE_IS_SET_RISING	1
 #define IRQ_EDGE_IS_SET_FALLING	0
 
@@ -285,23 +291,7 @@ void rekrut_stop_measurement(void)
 
 	uint32_t current_speed = rekrut_update_com_speed(min_period_value);
 
-#if DEBUG_ON == 1
-	{
-		printf("\ntim value: %ld (TIM1 CNT value per UART bit period)\n", min_period_value);
-		printf("current UART speed: %ld \n", current_speed);
-
-		for(uint8_t k = 0; k < 12; k++)
-		{
-			printf("Pomiar %d: %ld, current_period %ld, wartosc bitu: %d \n", k, measurements[k].period, measurements[k].current_period, measurements[k].bit_01);
-		}
-		printf("Pomiar min_period_value: %ld\n", min_period_value);
-		printf("\n");
-		printf("\n");
-	}
-#endif
-
 	uint8_t rx_data;
-
 	uint8_t bitsy[12];
 	uint8_t bits_no = 0;
 
@@ -311,9 +301,6 @@ void rekrut_stop_measurement(void)
 		if(measurements[g].current_period > 0)
 		{
 		bitsy[g] = (measurements[g].current_period + (min_period_value/2)) / min_period_value;
-#if DEBUG_ON == 1
-		printf("Bitsy[%d] %d\n", g, bitsy[g]);
-#endif
 
 		bits_no = bits_no + bitsy[g];
 
@@ -337,10 +324,41 @@ void rekrut_stop_measurement(void)
 			rx_data = (rx_data >> 1) | 0x80;
 		}
 	}
+
+	/* rx byte validation and answer*/
+	uint8_t temp_rx = rx_data & 0xF0;
+	if(temp_rx == 0xA0) // check if byte structure is valid
+	{
+		temp_rx = rx_data;
+		if((rx_data == MODULE1) || (rx_data == MODULE2) || (rx_data == MODULE3)) // check if modules are supported
+		{
+			printf("%c", ANSWER_SUPPORTED); // answer: confirmation, supported
+		}
+		else
+		{
+			printf("%c", ANSWER_NOT_SUPPORTED); // answer: confirmation, not supported
+		}
+	}
 #if DEBUG_ON == 1
-	printf("bits_no %d\n", bits_no);
-	printf("Odczytano %c\n", rx_data);
-	printf("Odczytano 0x%02x\n", rx_data);
+	else
+	{
+		LL_mDelay(1000);
+		printf("\n");
+		printf("Rx byte not valid \n");
+	}
+#endif
+
+#if DEBUG_ON == 1
+	LL_mDelay(1000);
+	for(uint8_t k = 0; k < 12; k++)
+	{
+		if(measurements[k].current_period > 0)
+		{
+			printf("Pomiar %d: %ld, period %ld, bity: %d * %d \n", k, measurements[k].period, measurements[k].current_period, bitsy[k], measurements[k].bit_01);
+		}
+	}
+	printf("Pomiar min_period_value: %ld, bitow: %d\n", min_period_value, bits_no);
+	printf("Odczytano (char): %c, (hex): 0x%02x, current UART speed: %ld \n", rx_data, rx_data, current_speed);
 #endif
 
 }
