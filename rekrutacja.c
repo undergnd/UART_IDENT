@@ -36,7 +36,7 @@
 static uint32_t tim_swtrigger_prescaler = 0;
 static uint32_t tim_swtrigger_period = 0xFFFFFFFF;
 
-/**/
+/* Periods measurements structures array*/
 struct Bits_s measurements[12];
 
 uint8_t measur_number = 0;
