@@ -293,6 +293,8 @@ void rekrut_stop_measurement(void)
 
 	uint32_t current_speed = rekrut_update_com_speed(min_period_value);
 
+	/* rx byte retrieve */
+
 	uint8_t rx_data;
 	uint8_t bitsy[12];
 	uint8_t bits_no = 0;
