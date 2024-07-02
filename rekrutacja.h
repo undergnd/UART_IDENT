@@ -18,7 +18,7 @@
 #define INT_UART_RX_EXTI_LINE              		LL_EXTI_LINE_PB0
 #define INT_UART_RX_EXTI_IRQn              		GPIOB_IRQn
 #define INT_UART_RX_EXTI_LINE_ENABLE()     		LL_EXTI_EnableIT(INT_UART_RX_EXTI_LINE)
-#define INT_UART_RX_EXTI_RISING_TRIG_ENABLE()  	      LL_EXTI_SetTrigger(LL_EXTI_TRIGGER_RISING_EDGE, INT_UART_RX_EXTI_LINE)
+#define INT_UART_RX_EXTI_RISING_TRIG_ENABLE()  	        LL_EXTI_SetTrigger(LL_EXTI_TRIGGER_RISING_EDGE, INT_UART_RX_EXTI_LINE)
 
 /* UART transmission measurement parameters structure*/
 typedef struct Bits_s
