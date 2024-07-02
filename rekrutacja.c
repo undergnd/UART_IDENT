@@ -154,7 +154,7 @@ static void rekrut_toggle_IRQ_edge()
 }
 
 /*
- *@brief Test GPIO setting
+ *@brief Test GPIO pin setting
  *@param none
  *@retval none
  */
