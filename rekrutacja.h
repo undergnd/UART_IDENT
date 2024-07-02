@@ -29,14 +29,8 @@ typedef struct Bits_s
 }Bits_TypeDef;
 
 
-void rekrut_RX_IRQ_pin_set(void);
-void rekrut_INT_UART_RX_Callback(void);
-void rekrut_out_pin_conf(void); //PB8
-void rekrut_start_timer(void);
-void rekrut_IRQ_RX_rising_edge(void);
-void rekrut_IRQ_RX_falling_edge(void);
+oid rekrut_start_timer(void);
 void rekrut_init(void);
-void MX_TIMx_Init(void);
 void rekrut_measurement(void);
 void rekrut_stop_measurement(void);
 
