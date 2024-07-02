@@ -29,7 +29,7 @@ typedef struct Bits_s
 }Bits_TypeDef;
 
 
-oid rekrut_start_timer(void);
+void rekrut_start_timer(void);
 void rekrut_init(void);
 void rekrut_measurement(void);
 void rekrut_stop_measurement(void);
