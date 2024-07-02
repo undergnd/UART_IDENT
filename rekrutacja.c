@@ -17,6 +17,7 @@
 #include "string.h"
 #include "rf_driver_ll_tim.h"
 #include "bluenrg_lp_com.h"
+#include "main.h"
 
 #define DEBUG_ON 1
 
@@ -32,10 +33,10 @@
 #define IRQ_EDGE_IS_SET_RISING	1
 #define IRQ_EDGE_IS_SET_FALLING	0
 
-#define K		(1) // number of bits taken to measure speed (1 or 2)
+#define K			(1) // number of bits taken to measure speed (1 or 2)
 #define S_115200 	(K*283) //K times TIM1 CNT value
 #define S_57600  	(K*552)
-#define S_38400     	(K*830)
+#define S_38400     (K*830)
 #define S_19200   	(K*1664)
 #define S_9600 		(K*3330)
 
@@ -44,16 +45,13 @@ static uint32_t tim_swtrigger_prescaler = 0;
 static uint32_t tim_swtrigger_period = 0xFFFFFFFF;
 
 /**/
-struct Bits_s measurements[12];
+struct Bits_s measurements[MAX_BITS_NO];
 
 uint8_t measur_number = 0;
 uint8_t measur_stat = 0;
 
 volatile uint8_t int_edge = 0;
-volatile uint8_t loop = 0;
 volatile uint32_t min_period_value = 0;
-
-uint32_t prev_counter_value = 0;
 
 /*
  *@brief UART RX pin setup for interrupt handling
@@ -206,6 +204,7 @@ static void rekrut_MX_TIMx_Init(void)
   */
 static uint32_t rekrut_update_com_speed(uint32_t bit_period_val)
 {
+
 	uint32_t speed = 115200; // default speed
 	uint32_t perc = 10; // percents of deviation
 
@@ -253,6 +252,7 @@ void rekrut_start_timer(void)
   */
 void rekrut_measurement(void)
 {
+	static uint32_t prev_counter_value = 0;
 	uint32_t counter_val = LL_TIM_GetCounter(TIM1);
 	rekrut_toggle_IRQ_edge();
 	measurements[measur_number].period = counter_val;
@@ -292,10 +292,10 @@ void rekrut_stop_measurement(void)
 	uint32_t current_speed = rekrut_update_com_speed(min_period_value);
 
 	uint8_t rx_data;
-	uint8_t bitsy[12];
+	uint8_t bitsy[MAX_BITS_NO];
 	uint8_t bits_no = 0;
 
-	for(uint8_t g = 0; g < 12; g++)
+	for(uint8_t g = 0; g < MAX_BITS_NO; g++)
 	{
 		uint8_t p = 0;
 		if(measurements[g].current_period > 0)
@@ -350,7 +350,7 @@ void rekrut_stop_measurement(void)
 
 #if DEBUG_ON == 1
 	LL_mDelay(1000);
-	for(uint8_t k = 0; k < 12; k++)
+	for(uint8_t k = 0; k < MAX_BITS_NO; k++)
 	{
 		if(measurements[k].current_period > 0)
 		{
@@ -371,7 +371,6 @@ void rekrut_stop_measurement(void)
   */
 void rekrut_init(void)
 {
-	loop = 0;
 	measur_stat = 0;
 	measur_number = 0;
 	min_period_value = 3700; // max period for 1 bit for UART speed 9600
@@ -380,6 +379,6 @@ void rekrut_init(void)
 	rekrut_IRQ_RX_set();
 	rekrut_out_pin_conf();
 	rekrut_MX_TIMx_Init();
-	memset(&measurements[0], 0, 12*(sizeof(struct Bits_s)));
+	memset(&measurements[0], 0, MAX_BITS_NO*(sizeof(struct Bits_s)));
 }
 
