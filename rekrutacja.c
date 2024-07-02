@@ -23,10 +23,10 @@
 #define TIMx                       TIM1
 #define LL_EnableClock_TIMx()      LL_APB0_EnableClock(LL_APB0_PERIPH_TIM1);
 
-#define MODULE1				(0xA3)
-#define MODULE2				(0xA5)
-#define MODULE3				(0xA8)
-#define ANSWER_SUPPORTED		(0xAA)
+#define MODULE1						(0xA3)
+#define MODULE2						(0xA5)
+#define MODULE3						(0xA8)
+#define ANSWER_SUPPORTED			(0xAA)
 #define ANSWER_NOT_SUPPORTED		(0xAf)
 
 #define IRQ_EDGE_IS_SET_RISING	1
@@ -36,7 +36,7 @@
 static uint32_t tim_swtrigger_prescaler = 0;
 static uint32_t tim_swtrigger_period = 0xFFFFFFFF;
 
-/* Period's measurements structures array*/
+/**/
 struct Bits_s measurements[12];
 
 uint8_t measur_number = 0;
@@ -53,7 +53,7 @@ uint32_t prev_counter_value = 0;
  *@param none
  *@retval none
  */
-void rekrut_RX_IRQ_pin_set(void)
+static void rekrut_RX_IRQ_pin_set(void)
 {
 	LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -74,7 +74,7 @@ void rekrut_RX_IRQ_pin_set(void)
  *@param none
  *@retval none
  */
-void rekrut_IRQ_RX_set(void)
+static void rekrut_IRQ_RX_set(void)
 {
 	LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
 
@@ -100,7 +100,7 @@ void rekrut_IRQ_RX_set(void)
  *@param none
  *@retval none
  */
-void rekrut_IRQ_RX_rising_edge(void)
+static void rekrut_IRQ_RX_rising_edge(void)
 {
 	LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
 
@@ -109,7 +109,6 @@ void rekrut_IRQ_RX_rising_edge(void)
 	EXTI_InitStruct.Type = LL_EXTI_TYPE_EDGE;
 	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING_EDGE;
 	LL_EXTI_Init(&EXTI_InitStruct);
-	
 	int_edge = IRQ_EDGE_IS_SET_RISING;
 }
 
@@ -118,7 +117,7 @@ void rekrut_IRQ_RX_rising_edge(void)
  *@param none
  *@retval none
  */
-void rekrut_IRQ_RX_falling_edge(void)
+static void rekrut_IRQ_RX_falling_edge(void)
 {
 	LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
 
@@ -127,7 +126,6 @@ void rekrut_IRQ_RX_falling_edge(void)
 	EXTI_InitStruct.Type = LL_EXTI_TYPE_EDGE;
 	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING_EDGE;
 	LL_EXTI_Init(&EXTI_InitStruct);
-	
 	int_edge = IRQ_EDGE_IS_SET_FALLING;
 }
 
@@ -136,7 +134,7 @@ void rekrut_IRQ_RX_falling_edge(void)
  *@param none
  *@retval none
  */
-void rekrut_toggle_IRQ_edge()
+static void rekrut_toggle_IRQ_edge()
 {
 	if(int_edge == IRQ_EDGE_IS_SET_RISING)
 	{
@@ -153,7 +151,7 @@ void rekrut_toggle_IRQ_edge()
  *@param none
  *@retval none
  */
-void rekrut_out_pin_conf(void)
+static void rekrut_out_pin_conf(void)
 {
 	LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -176,7 +174,7 @@ void rekrut_out_pin_conf(void)
   * @param none
   * @retval none
   */
-void rekrut_MX_TIMx_Init(void)
+static void rekrut_MX_TIMx_Init(void)
 {
   LL_TIM_InitTypeDef TIM_InitStruct = {0};
 
@@ -201,10 +199,10 @@ void rekrut_MX_TIMx_Init(void)
   */
 static uint32_t rekrut_update_com_speed(uint32_t bit_period_val)
 {
-#define K		(1) // number of bits taken to measure speed (1 or 2)
+#define K			(1) // number of bits taken to measure speed (1 or 2)
 #define S_115200 	(K*283) //K times TIM1 CNT value
 #define S_57600  	(K*552)
-#define S_38400     	(K*830)
+#define S_38400     (K*830)
 #define S_19200   	(K*1664)
 #define S_9600 		(K*3330)
 
@@ -293,8 +291,6 @@ void rekrut_stop_measurement(void)
 
 	uint32_t current_speed = rekrut_update_com_speed(min_period_value);
 
-	
-	/* rx byte retrieve */
 	uint8_t rx_data;
 	uint8_t bitsy[12];
 	uint8_t bits_no = 0;
@@ -350,7 +346,9 @@ void rekrut_stop_measurement(void)
 		printf("\n");
 		printf("Rx byte not valid \n");
 	}
+#endif
 
+#if DEBUG_ON == 1
 	LL_mDelay(1000);
 	for(uint8_t k = 0; k < 12; k++)
 	{
