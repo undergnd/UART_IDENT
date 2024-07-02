@@ -40,6 +40,9 @@
 #define S_19200   	(K*1664)
 #define S_9600 		(K*3330)
 
+#define MAX_BIT_PERIOD 	3700
+#define PERC   			10 // percents of deviation
+
 /* TIMx clock configuration */
 static uint32_t tim_swtrigger_prescaler = 0;
 static uint32_t tim_swtrigger_period = 0xFFFFFFFF;
@@ -206,25 +209,24 @@ static uint32_t rekrut_update_com_speed(uint32_t bit_period_val)
 {
 
 	uint32_t speed = 115200; // default speed
-	uint32_t perc = 10; // percents of deviation
 
-	if((bit_period_val < (S_115200 + (S_115200/perc))) && (bit_period_val > (S_115200 - (S_115200/perc))))
+	if((bit_period_val < (S_115200 + (S_115200/PERC))) && (bit_period_val > (S_115200 - (S_115200/PERC))))
 	{
 		speed = 115200;
 	}
-	if((bit_period_val < (S_57600 + (S_57600/perc))) && (bit_period_val > (S_57600 - (S_57600/perc))))
+	if((bit_period_val < (S_57600 + (S_57600/PERC))) && (bit_period_val > (S_57600 - (S_57600/PERC))))
 	{
 		speed = 57600;
 	}
-	if((bit_period_val < (S_38400 + (S_38400/perc))) && (bit_period_val > (S_38400 - (S_38400/perc))))
+	if((bit_period_val < (S_38400 + (S_38400/PERC))) && (bit_period_val > (S_38400 - (S_38400/PERC))))
 	{
 		speed = 38400;
 	}
-	if((bit_period_val < (S_19200 + (S_19200/perc))) && (bit_period_val > (S_19200 - (S_19200/perc))))
+	if((bit_period_val < (S_19200 + (S_19200/PERC))) && (bit_period_val > (S_19200 - (S_19200/PERC))))
 	{
 		speed = 19200;
 	}
-	if((bit_period_val < (S_9600 + (S_9600/perc))) && (bit_period_val > (S_9600 - (S_9600/perc))))
+	if((bit_period_val < (S_9600 + (S_9600/PERC))) && (bit_period_val > (S_9600 - (S_9600/PERC))))
 	{
 		speed = 9600;
 	}
@@ -373,7 +375,7 @@ void rekrut_init(void)
 {
 	measur_stat = 0;
 	measur_number = 0;
-	min_period_value = 3700; // max period for 1 bit for UART speed 9600
+	min_period_value = MAX_BIT_PERIOD; // max period for 1 bit for UART speed 9600
 
 	rekrut_RX_IRQ_pin_set();
 	rekrut_IRQ_RX_set();
