@@ -32,6 +32,13 @@
 #define IRQ_EDGE_IS_SET_RISING	1
 #define IRQ_EDGE_IS_SET_FALLING	0
 
+#define K		(1) // number of bits taken to measure speed (1 or 2)
+#define S_115200 	(K*283) //K times TIM1 CNT value
+#define S_57600  	(K*552)
+#define S_38400     	(K*830)
+#define S_19200   	(K*1664)
+#define S_9600 		(K*3330)
+
 /* TIMx clock configuration */
 static uint32_t tim_swtrigger_prescaler = 0;
 static uint32_t tim_swtrigger_period = 0xFFFFFFFF;
@@ -199,13 +206,6 @@ static void rekrut_MX_TIMx_Init(void)
   */
 static uint32_t rekrut_update_com_speed(uint32_t bit_period_val)
 {
-#define K			(1) // number of bits taken to measure speed (1 or 2)
-#define S_115200 	(K*283) //K times TIM1 CNT value
-#define S_57600  	(K*552)
-#define S_38400     (K*830)
-#define S_19200   	(K*1664)
-#define S_9600 		(K*3330)
-
 	uint32_t speed = 115200; // default speed
 	uint32_t perc = 10; // percents of deviation
 
