@@ -1,4 +1,9 @@
- COM_Init(NULL);
+int main(void)
+{
+
+void system_init(void);
+	
+COM_Init(NULL);
 
   uint32_t UID_0 = LL_GetUID_Word0();
   uint32_t UID_1 = LL_GetUID_Word1();
@@ -20,3 +25,4 @@
 	  rekrut_stop_measurement();
 	  rekrut_init();
 	}
+}
