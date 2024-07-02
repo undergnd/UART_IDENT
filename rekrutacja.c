@@ -33,11 +33,11 @@
 #define IRQ_EDGE_IS_SET_FALLING	0
 
 #define K			(1) // number of bits taken to measure speed (1 or 2)
-#define S_115200 		(K*283) //K times TIM1 CNT value
-#define S_57600  		(K*552)
-#define S_38400     		(K*830)
+#define S_115200 		(K*277) //K times TIM1 CNT value
+#define S_57600  		(K*554)
+#define S_38400     		(K*833)
 #define S_19200   		(K*1664)
-#define S_9600 			(K*3330)
+#define S_9600 			(K*3334)
 
 #define MAX_BIT_PERIOD 	3700
 #define PERC   			10 // percents of deviation
