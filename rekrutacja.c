@@ -19,7 +19,6 @@
 #include "bluenrg_lp_com.h"
 #include "main.h"
 
-#define DEBUG_ON 1
 
 #define TIMx                       TIM1
 #define LL_EnableClock_TIMx()      LL_APB0_EnableClock(LL_APB0_PERIPH_TIM1);
