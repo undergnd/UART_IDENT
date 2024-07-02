@@ -1,7 +1,7 @@
 int main(void)
 {
 
-void system_init(void);
+void system_init(void); // some general system initialization function
 	
 COM_Init(NULL);
 
