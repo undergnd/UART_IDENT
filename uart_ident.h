@@ -1,5 +1,5 @@
 /*
- * rekrutacja.h
+ * uart_ident.h
  *
  *  Created on: 29 cze 2024
  *      Author: gbednarski
