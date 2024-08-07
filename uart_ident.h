@@ -10,6 +10,7 @@
 
 #include "stdint.h"
 
+
 /* definitions sets for EXTI IRQ UART RX*/
 #define INT_UART_RX_GPIO_PIN               		LL_GPIO_PIN_0
 #define INT_UART_RX_GPIO_PORT              		GPIOB
