@@ -5,8 +5,8 @@
  *      Author: gbednarski
  */
 
-#ifndef INC_REKRUTACJA_H_
-#define INC_REKRUTACJA_H_
+#ifndef INC_UART_IDENT_H_
+#define INC_UART_IDENT_H_
 
 #include "stdint.h"
 
@@ -34,4 +34,4 @@ void rekrut_init(void);
 void rekrut_measurement(void);
 void rekrut_stop_measurement(void);
 
-#endif /* INC_REKRUTACJA_H_ */
+#endif /* INC_UART_IDENT_H_ */
