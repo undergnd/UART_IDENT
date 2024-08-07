@@ -1,11 +1,11 @@
 /*
- * rekrutacja.c
+ * uart_ident.c
  *
  *  Created on: 29 cze 2024
  *      Author: gbednarski
  */
 
-#include "rekrutacja.h"
+#include "uart_ident.h"
 #include "rf_driver_hal_power_manager.h"
 #include "rf_driver_ll_gpio.h"
 #include "rf_driver_ll_exti.h"
