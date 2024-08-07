@@ -1,16 +1,15 @@
 UART_IDENT
 
-FUNKCJA PROGRAMU
+PROGRAM FUNCTION
 
-Program wykrywa prędkość transmisji UART na podstawie odebranego bajtu i wykrywa, czy nadający moduł jest odsługiwany, po czym wysyła potwierdzenie (obsługiwany / nie obsługiwany) jeśli struktura bajtu powitalnego jest ok, w innym przypadku nie wysyła nic. 
+The program detects the UART baud rate based on the received byte and detects whether the transmitting module is supported, then sends an acknowledgment (supported / not supported) if the welcome byte structure is ok, otherwise it sends nothing.
 
-WYNIKI
+RESULTS
 
-Załączone pliki /log wyniki pomiarów.png, waveforms.png, logs_conf.png, waveforms_conf.png/ pokazują odbiór kodu "0xA3" z potwierdzeniem oraz odbiór przypadkowego znaku (pokazany impuls pomiarowy okresu bitu) dla każdej prędkości w zakeresie 9600 - 115200 bps. W teście zmieniałem prędkość nadawania w terminalu TeraTerm lub Putty i otrzymywałem odpowiedź z kontrolera ARM w wyliczonej prędkości UART takiej samej jak predkość nadawania terminali.
+The attached files /log measurement results.png, waveforms.png, logs_conf.png, waveforms_conf.png/ show the reception of the "0xA3" code with confirmation and the reception of a random character (bit period measurement pulse shown) for each speed in the range 9600 - 115200 bps. In the test, I changed the transmit speed in the TeraTerm or Putty terminal and received a response from the ARM controller at the calculated UART speed the same as the terminal transmit speed.
 
-KRÓTKI OPIS JAK DZIAŁA PROGRAM 
+A SHORT DESCRIPTION OF HOW THE PROGRAM WORKS
 
-W funkcji main znajduje się pętla while która może być przerwana dynamicznym timeoutem. Timeout jest dynamiczny ponieważ jego wartość jest uaktualniana wraz ze znalezieniem czasu trwania bitu /wartość min_period_value/. W zależności od prędkości transmisji bity mają różną szerokość. Na podstawie pomiaru szerokości bitu odbiornik jest w stanie obliczyć prędkość transmisji /funkcja rekrut_update_com_speed/. Pomiar szerokości bitu dokonywany jest poprzez odczyt timera T1 pomiędzy dwoma kolejnymi zboczami sygnału. Ponieważ znamy również nachylenie zboczy /np.: int_edge = IRQ_EDGE_IS_SET_FALLING;/, możemy określić czy sygnał pomiędzy nimi to jedynki czy zera. Wszystkie czytane wartości są zapisywane do tablicy /struct Bits_s measurements[]/. 
-Po przekroczeniu timeoutu następuje obliczenie poszczególnych bitów na podstawie zapisanych czasów trwania mierzonych odcinków pomiędzy zboczami /funkcja rekrut_stop_measurement/ i obliczana jest wartość bajtu. Obliczony bajt porównywany jest z bajtami powitalnymi obsługiwanych modułów i jeżeli następuje zgodność tych bajtów to jest odpowiedź pozytywna 0xAA. W innym wypadku jeżeli struktura bajtów powitalnego jest prawidłowa ale moduł nie jest obsługiwany udzielana jest odpowiedź 0xAF. Odpowiedź wysyłana jest z aktualną, obliczoną prędkością.
+The main function contains a while loop that can be interrupted with a dynamic timeout. Timeout is dynamic because its value is updated as the bit duration /min_period_value/ is found. Depending on the transmission speed, the bits have different widths. Based on the bit width measurement, the receiver is able to calculate the transmission speed /recruit_update_com_speed/ function. The bit width is measured by reading the T1 timer between two consecutive signal edges. Since we also know the slope of the edges /e.g.: int_edge = IRQ_EDGE_IS_SET_FALLING;/, we can determine whether the signal between them is ones or zeros. All read values ​​are written to the /struct Bits_s measurements[]/ array. After exceeding the timeout, individual bits are calculated based on the recorded durations of the measured sections between the edges /recruit_stop_measurement function/ and the byte value is calculated. The calculated byte is compared with the welcome bytes of the supported modules and if these bytes match, there is a positive response 0xAA. Otherwise, if the welcome byte structure is correct but the module is not supported, the response 0xAF is given. The response is sent at the current calculated speed.
 
-Program działa realnie, brakuje natomiast różnego rodzaju detekcji i zabezpieczeń przed błędami lub nieoczekiwanymi zdarzeniami w transmisji.
+The program works realistically, but it lacks various types of detection and protection against errors or unexpected events in transmission.
